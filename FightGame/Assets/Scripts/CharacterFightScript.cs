@@ -22,10 +22,6 @@ namespace Assets.Scripts
         private SimpleHealthBar hpBar;
         private SimpleHealthBar staminaBar;
 
-        //private bool isDodging;
-        //private Vector3 dodgeDirection;
-        //private Vector3 initialPosition;
-
         void Start()
         {
             animator = GetComponent<Animator>();
@@ -39,8 +35,6 @@ namespace Assets.Scripts
             inputs = sceneManager.GetCharacterInputs(gameObject.name);
             attacks = sceneManager.GetCharacterAttacks(gameObject.name);
             (hpBar, staminaBar) = sceneManager.GetCharacterHealthBar(gameObject.name);
-
-            //initialPosition = rigidbody.position;
         }
 
         void Update()
@@ -52,17 +46,12 @@ namespace Assets.Scripts
 
             if (animator.GetBool(CharacterAction.Dodge.ToString()))
             {
-                //isDodging = true;
-                //dodgeDirection = Vector3.up;
-
                 Dodge();
             }
             else if (animator.GetBool(CharacterAction.Attack.ToString()))
             {
                 Attack(attacks[pressedKey.Value]);
             }
-
-            //Dodge();
 
             if (HP <= 0 || Stamina <= 0)
                 Die();
@@ -87,20 +76,6 @@ namespace Assets.Scripts
         private void Dodge()
         {
             rigidBody.AddForce(Vector3.up * 50f, ForceMode.Impulse);
-
-            //if (isDodging)
-            //{
-            //    rigidbody.AddForce(dodgeDirection * 1000f);
-
-            //    if (dodgeDirection == Vector3.up && rigidbody.position.y >= 8f)
-            //        dodgeDirection = Vector3.down;
-
-            //    if (dodgeDirection == Vector3.down && rigidbody.position.y < 0.9f)
-            //    {
-            //        rigidbody.MovePosition(initialPosition);
-            //        isDodging = false;
-            //    }
-            //}
         }
 
         private void Attack(CharacterAttack characterAttack)
