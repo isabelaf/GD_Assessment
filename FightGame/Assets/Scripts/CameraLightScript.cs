@@ -32,7 +32,7 @@ namespace Assets.Scripts
             }
             else
             {
-                transform.rotation = Target.rotation;
+                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, Target.rotation.eulerAngles.y, Target.rotation.eulerAngles.z);
             }
         }
     }

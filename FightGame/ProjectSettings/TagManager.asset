@@ -6,6 +6,7 @@ TagManager:
   tags:
   - character
   - obstacle
+  - light
   layers:
   - Default
   - TransparentFX

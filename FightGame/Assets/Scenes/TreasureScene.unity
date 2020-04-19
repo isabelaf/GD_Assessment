@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 10112002}
   m_Layer: 0
   m_Name: light_directional3
-  m_TagString: Untagged
+  m_TagString: light
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -516,7 +516,7 @@ GameObject:
   - component: {fileID: 437226696}
   m_Layer: 0
   m_Name: light_directional4
-  m_TagString: Untagged
+  m_TagString: light
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -899,11 +899,11 @@ GameObject:
   - component: {fileID: 705507997}
   m_Layer: 0
   m_Name: light_directional1
-  m_TagString: Untagged
+  m_TagString: light
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &705507994
 Light:
   m_ObjectHideFlags: 0
@@ -1218,7 +1218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79aa7555f5197d644a4e92d2c42a35f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetPosition: {x: 0, y: 1.5, z: -3}
+  offsetPosition: {x: 0, y: 3, z: -5}
   offsetPositionSpace: 1
   lookAt: 0
 --- !u!1 &1013184913
@@ -2740,11 +2740,11 @@ GameObject:
   - component: {fileID: 2020259758}
   m_Layer: 0
   m_Name: light_directional2
-  m_TagString: Untagged
+  m_TagString: light
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &2020259758
 Light:
   m_ObjectHideFlags: 0

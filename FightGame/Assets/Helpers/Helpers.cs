@@ -52,6 +52,7 @@
     {
         public const string Character = "character";
         public const string Obstacle = "obstacle";
+        public const string Light = "light";
     }
 
     public class PlayerPrefsKeys

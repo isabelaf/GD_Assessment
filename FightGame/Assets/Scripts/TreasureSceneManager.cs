@@ -1,5 +1,6 @@
 ﻿using Assets.Helpers;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -94,8 +95,12 @@ namespace Assets.Scripts
             GameObject.Find(Characters.Enemy).GetComponent<EnemyScript>().enabled = true;
 
             var cameraScript = Camera.main.GetComponent<CameraLightScript>();
+            cameraScript.transform.rotation = Quaternion.Euler(25, 0, 0);
             cameraScript.Target = character.transform;
             cameraScript.enabled = true;
+
+            foreach (var light in gameObject.scene.GetRootGameObjects().Where(go => go.CompareTag(Tags.Light) && !go.activeSelf))
+                light.SetActive(true);
 
             popup = 0;
         }
