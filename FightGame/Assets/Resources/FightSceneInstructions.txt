@@ -1,6 +1,6 @@
 ﻿<b>Instructions:</b>
-In this scene, you two have to fight each other.
-The winner will be the one to ascend to the next level.
+In this scene, you two have to fight each other for up to three rounds.
+The first one to win 2 rounds will ascend to the next level.
 For fighting, you have to fire attacks at each other.
 Each attack does an amount of damage and requires an amount of stamina. You cannot perform an attack if you don't have enough stamina.
 The first one to run out of HP/stamina will die.

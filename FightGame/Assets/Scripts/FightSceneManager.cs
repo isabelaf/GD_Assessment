@@ -1,8 +1,8 @@
 ﻿using Assets.Helpers;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
@@ -10,10 +10,14 @@ namespace Assets.Scripts
     {
         private CharacterFightScript[] characters;
 
-        public bool IsGameOver { get; private set; }
-        private string loser;
+        private Text scoreText;
 
-        private int popup;
+        public bool IsGameOver { get; private set; }
+        private string winner;
+        private int round;
+        private int[] scores;
+
+        private int popup = 0;
 
         void Start()
         {
@@ -23,7 +27,15 @@ namespace Assets.Scripts
             characters[0] = GameObject.Find(Characters.Witch).GetComponent<CharacterFightScript>();
             characters[1] = GameObject.Find(Characters.Warrior).GetComponent<CharacterFightScript>();
 
-            popup = 1;
+            scoreText = GameObject.Find(SceneObjects.FightSceneScore).GetComponent<Text>();
+
+            InitRound();
+            SetScoreText();
+
+            if (round == 1)
+                popup = 1;
+            else
+                EnableCharacters();
         }
 
         void OnGUI()
@@ -38,9 +50,16 @@ namespace Assets.Scripts
                     break;
                 case 2:
                     PopupService.ShowConfirmationPopup(
-                        2, 
-                        FightSceneMessages.GameOverMessage(characters.First(c => c.name != loser).name), 
-                        new List<(string, System.Action)> { (PopupButtons.NextLevel, ContinueGame) },
+                        2,
+                        FightSceneMessages.NextRoundMessage,
+                        new List<(string, System.Action)> { (PopupButtons.NextRound, NextRound) },
+                        true);
+                        break;
+                case 3:
+                    PopupService.ShowConfirmationPopup(
+                        3, 
+                        FightSceneMessages.GameOverMessage(winner), 
+                        new List<(string, System.Action)> { (PopupButtons.NextLevel, NextLevel) },
                         true);
                     break;
                 default:
@@ -110,8 +129,36 @@ namespace Assets.Scripts
             if (!IsGameOver)
             {
                 IsGameOver = true;
-                loser = characterName;
-                popup = 2;
+
+                for (var i = 0; i < characters.Length; i++)
+                {
+                    if (characters[i].name != characterName)
+                    {
+                        scores[i]++;
+                        break;
+                    }
+                }
+
+                for (var i = 0; i < scores.Length; i++)
+                {
+                    if (scores[i] == 2)
+                    {
+                        winner = characters[i].name;
+                        break;
+                    }
+                }
+
+                SetScoreText();
+
+                if (!string.IsNullOrEmpty(winner))
+                {
+                    popup = 3;
+                }
+                else
+                {
+                    round++;
+                    popup = 2;
+                }
             }
         }
 
@@ -147,18 +194,53 @@ namespace Assets.Scripts
             }
         }
 
+        private void InitRound()
+        {
+            if (PlayerPrefs.HasKey(PlayerPrefsKeys.FightSceneRound))
+            {
+                round = PlayerPrefs.GetInt(PlayerPrefsKeys.FightSceneRound);
+                scores = new int[] { PlayerPrefs.GetInt(PlayerPrefsKeys.FightSceneWitchScore), PlayerPrefs.GetInt(PlayerPrefsKeys.FightSceneWarriorScore) };
+
+                PlayerPrefs.DeleteAll();
+            }
+            else
+            {
+                round = 1;
+                scores = new int[] { 0, 0 };
+            }
+        }
+
+        private void SetScoreText()
+        {
+            scoreText.text = FightSceneMessages.ScoreTextMessage(round, scores[0], scores[1]);
+        }
+
         private void StartGame()
         {
-            foreach (var character in characters)
-                character.enabled = true;
+            EnableCharacters();
 
             popup = 0;
         }
 
-        private void ContinueGame()
+        private void NextRound()
         {
-            PlayerPrefs.SetString(PlayerPrefsKeys.FightSceneLoser, loser);
+            PlayerPrefs.SetInt(PlayerPrefsKeys.FightSceneRound, round);
+            PlayerPrefs.SetInt(PlayerPrefsKeys.FightSceneWitchScore, scores[0]);
+            PlayerPrefs.SetInt(PlayerPrefsKeys.FightSceneWarriorScore, scores[1]);
+
+            SceneManager.LoadScene(Scenes.FightScene, LoadSceneMode.Single);
+        }
+
+        private void NextLevel()
+        {
+            PlayerPrefs.SetString(PlayerPrefsKeys.FightSceneWinner, winner);
             SceneManager.LoadScene(Scenes.TreasureScene, LoadSceneMode.Single);
+        }
+
+        private void EnableCharacters()
+        {
+            foreach (var character in characters)
+                character.enabled = true;
         }
     }
 }

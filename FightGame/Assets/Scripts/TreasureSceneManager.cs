@@ -75,7 +75,7 @@ namespace Assets.Scripts
 
         private void InitCharacters()
         {
-            if (!PlayerPrefs.HasKey(PlayerPrefsKeys.FightSceneLoser)) // testing case
+            if (!PlayerPrefs.HasKey(PlayerPrefsKeys.FightSceneWinner)) // testing case
             {
                 GameObject.Find(Characters.Witch).SetActive(false);
                 GameObject.Find(Characters.Enemy).SetActive(false);
@@ -83,8 +83,8 @@ namespace Assets.Scripts
                 return;
             }
 
-            GameObject.Find(PlayerPrefs.GetString(PlayerPrefsKeys.FightSceneLoser)).SetActive(false);
-            PlayerPrefs.DeleteKey(PlayerPrefsKeys.FightSceneLoser);
+            gameObject.scene.GetRootGameObjects().First(go => go.name == PlayerPrefs.GetString(PlayerPrefsKeys.FightSceneWinner)).SetActive(true);
+            PlayerPrefs.DeleteKey(PlayerPrefsKeys.FightSceneWinner);
         }
 
         private void StartGame()

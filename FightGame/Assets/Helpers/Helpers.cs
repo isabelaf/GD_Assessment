@@ -29,15 +29,24 @@
     {
         public const string SceneManager = "sceneManager";
         public const string TreasureSceneTreasure = "prop_treasure";
+        public const string FightSceneScore = "text_score";
     }
 
     public class FightSceneMessages
     {
         private const string gameOverMessage = "Congrats, {0}! Click on 'Next level' to go to the next level.";
+        private const string scoreTextMessage = "Round: {0}\nScore: {1} - {2}";
+
+        public const string NextRoundMessage = "Click on 'Next round' to go to the next round.";
 
         public static string GameOverMessage(string winnerName)
         {
             return string.Format(gameOverMessage, winnerName);
+        }
+
+        public static string ScoreTextMessage(int round, int firstScore, int secondScore)
+        {
+            return string.Format(scoreTextMessage, round.ToString(), firstScore.ToString(), secondScore.ToString());
         }
     }
 
@@ -57,7 +66,10 @@
 
     public class PlayerPrefsKeys
     {
-        public const string FightSceneLoser = "fight_scene_loser";
+        public const string FightSceneWinner = "fight_scene_winner";
+        public const string FightSceneRound = "fight_scene_round";
+        public const string FightSceneWitchScore = "fight_scene_witch_score";
+        public const string FightSceneWarriorScore = "fight_scene_warrior_score";
     }
 
     public class PopupButtons
@@ -66,6 +78,7 @@
         public const string NextLevel = "Next level";
         public const string Exit = "Exit";
         public const string PlayAgain = "Play again";
+        public const string NextRound = "Next round";
     }
 
     public class ResourceFiles
