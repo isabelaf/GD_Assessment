@@ -28,13 +28,12 @@
     public class SceneObjects
     {
         public const string SceneManager = "sceneManager";
-        public const string GameOverText = "text_gameOver";
         public const string TreasureSceneTreasure = "prop_treasure";
     }
 
     public class FightSceneMessages
     {
-        private const string gameOverMessage = "Congrats, {0}! Press Space to go to the next level.";
+        private const string gameOverMessage = "Congrats, {0}! Click on 'Next level' to go to the next level.";
 
         public static string GameOverMessage(string winnerName)
         {
@@ -46,7 +45,7 @@
     {
         public const string WinMessage = "Congrats! You got the treasure!";
         public const string LoseMessage = "Oh, no! The dragon captured you!";
-        public const string GameOverMessage = "Press Space to play again or Esc to exit the game.";
+        public const string GameOverMessage = "Click on 'Play again' to play again or on 'Exit' to exit the game.";
     }
 
     public class Tags
@@ -58,6 +57,20 @@
     public class PlayerPrefsKeys
     {
         public const string FightSceneLoser = "fight_scene_loser";
+    }
+
+    public class PopupButtons
+    {
+        public const string OK = "OK";
+        public const string NextLevel = "Next level";
+        public const string Exit = "Exit";
+        public const string PlayAgain = "Play again";
+    }
+
+    public class ResourceFiles
+    {
+        public const string FightSceneInstructions = "FightSceneInstructions";
+        public const string TreasureSceneInstructions = "TreasureSceneInstructions";
     }
 
     public class HealthBar

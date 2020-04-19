@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
@@ -14,6 +13,8 @@ namespace Assets.Scripts
         public bool IsGameOver { get; private set; }
         private string loser;
 
+        private int popup;
+
         void Start()
         {
             Physics.gravity = new Vector3(0f, -80f, 0f);
@@ -21,14 +22,30 @@ namespace Assets.Scripts
             characters = new CharacterFightScript[2];
             characters[0] = GameObject.Find(Characters.Witch).GetComponent<CharacterFightScript>();
             characters[1] = GameObject.Find(Characters.Warrior).GetComponent<CharacterFightScript>();
+
+            popup = 1;
         }
 
-        private void Update()
+        void OnGUI()
         {
-            if (IsGameOver && Input.GetKeyUp(KeyCode.Space))
+            switch (popup)
             {
-                PlayerPrefs.SetString(PlayerPrefsKeys.FightSceneLoser, loser);
-                SceneManager.LoadScene(Scenes.TreasureScene, LoadSceneMode.Single);
+                case 1:
+                    PopupService.ShowConfirmationPopup(
+                        1,
+                        Resources.Load<TextAsset>(ResourceFiles.FightSceneInstructions).text,
+                        new List<(string, System.Action)> { (PopupButtons.OK, StartGame) });
+                    break;
+                case 2:
+                    PopupService.ShowConfirmationPopup(
+                        2, 
+                        FightSceneMessages.GameOverMessage(characters.First(c => c.name != loser).name), 
+                        new List<(string, System.Action)> { (PopupButtons.NextLevel, ContinueGame) },
+                        true);
+                    break;
+                default:
+                    break;
+
             }
         }
 
@@ -94,8 +111,7 @@ namespace Assets.Scripts
             {
                 IsGameOver = true;
                 loser = characterName;
-
-                GameObject.Find(SceneObjects.GameOverText).GetComponent<Text>().text = FightSceneMessages.GameOverMessage(characters.First(c => c.name != loser).name);
+                popup = 2;
             }
         }
 
@@ -129,6 +145,20 @@ namespace Assets.Scripts
                 default:
                     return new List<KeyCode>();
             }
+        }
+
+        private void StartGame()
+        {
+            foreach (var character in characters)
+                character.enabled = true;
+
+            popup = 0;
+        }
+
+        private void ContinueGame()
+        {
+            PlayerPrefs.SetString(PlayerPrefsKeys.FightSceneLoser, loser);
+            SceneManager.LoadScene(Scenes.TreasureScene, LoadSceneMode.Single);
         }
     }
 }

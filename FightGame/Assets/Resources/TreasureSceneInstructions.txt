@@ -1,0 +1,8 @@
+﻿<b>Instructions:</b>
+In this scene, you have to reach to the treasure chest.
+But be careful, the treasure chest is guarded by a merciless dragon which will start attacking you as soon as it senses your presence. Once the dragon got you, it's game over.
+
+<b>Controls:</b>
+Space: jump
+←, →: rotate
+↑, ↓: move

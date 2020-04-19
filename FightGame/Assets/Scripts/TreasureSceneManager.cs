@@ -1,7 +1,7 @@
 ﻿using Assets.Helpers;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
@@ -10,6 +10,9 @@ namespace Assets.Scripts
         private CharacterTreasureScript character;
 
         public bool IsGameOver { get; private set; }
+        private bool? isWin;
+
+        private int popup;
 
         void Start()
         {
@@ -17,25 +20,33 @@ namespace Assets.Scripts
 
             InitCharacters();
 
-            var characterGameObject = GameObject.FindGameObjectWithTag(Tags.Character);
-
-            character = characterGameObject.GetComponent<CharacterTreasureScript>();
-
-            Camera.main.GetComponent<CameraLightScript>().Target = characterGameObject.transform;
-            Light.GetLights(LightType.Directional, 0)[0].GetComponent<CameraLightScript>().Target = characterGameObject.transform;
+            popup = 1;
         }
 
-        void Update()
+        void OnGUI()
         {
-            if (IsGameOver)
+            switch (popup)
             {
-                if (Input.GetKeyUp(KeyCode.Space))
-                {
-                    SceneManager.LoadScene(Scenes.FightScene, LoadSceneMode.Single);
-                }
+                case 1:
+                    PopupService.ShowConfirmationPopup(
+                        1,
+                        Resources.Load<TextAsset>(ResourceFiles.TreasureSceneInstructions).text,
+                        new List<(string, System.Action)>{ (PopupButtons.OK, StartGame) });
+                    break;
+                case 2:
+                    PopupService.ShowConfirmationPopup(
+                        2,
+                        $"{(isWin.Value ? TreasureSceneMessages.WinMessage : TreasureSceneMessages.LoseMessage)}\n{TreasureSceneMessages.GameOverMessage}",
+                        new List<(string, System.Action)>
+                        { 
+                            (PopupButtons.Exit, () => { Application.Quit(0); }),
+                            (PopupButtons.PlayAgain, () => { SceneManager.LoadScene(Scenes.FightScene, LoadSceneMode.Single); })
+                        },
+                        true);
+                    break;
+                default:
+                    break;
 
-                if (Input.GetKeyUp(KeyCode.Escape))
-                    Application.Quit(0);
             }
         }
 
@@ -44,9 +55,7 @@ namespace Assets.Scripts
             if (IsGameOver)
                 return;
 
-            bool isWin = false;
-
-            if (collision.gameObject.GetComponent<EnemyScript>() != null)
+            if (collision.gameObject.name == Characters.Enemy)
             {
                 IsGameOver = true;
                 character.Die();
@@ -60,7 +69,7 @@ namespace Assets.Scripts
             }
 
             if (IsGameOver)
-                ShowGameOverMessage(isWin);
+                popup = 2;
         }
 
         private void InitCharacters()
@@ -77,9 +86,18 @@ namespace Assets.Scripts
             PlayerPrefs.DeleteKey(PlayerPrefsKeys.FightSceneLoser);
         }
 
-        private void ShowGameOverMessage(bool isWin)
+        private void StartGame()
         {
-            GameObject.Find(SceneObjects.GameOverText).GetComponent<Text>().text = $"{(isWin ? TreasureSceneMessages.WinMessage : TreasureSceneMessages.LoseMessage)}\n{TreasureSceneMessages.GameOverMessage}"; ;
+            character = GameObject.FindGameObjectWithTag(Tags.Character).GetComponent<CharacterTreasureScript>();
+            character.enabled = true;
+
+            GameObject.Find(Characters.Enemy).GetComponent<EnemyScript>().enabled = true;
+
+            var cameraScript = Camera.main.GetComponent<CameraLightScript>();
+            cameraScript.Target = character.transform;
+            cameraScript.enabled = true;
+
+            popup = 0;
         }
     }
 }

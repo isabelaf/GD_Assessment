@@ -34,6 +34,8 @@ namespace Assets.Scripts
 
         void OnCollisionEnter(Collision collision)
         {
+            if (!enabled) return;
+
             sceneManager.CharacterCollision(collision);
         }
 
