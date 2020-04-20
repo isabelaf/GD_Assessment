@@ -13,8 +13,7 @@ namespace Assets.Controllers
 
         void Update()
         {
-            var deltaRotation = Quaternion.Euler(new Vector3(0, 500, 0) * Time.deltaTime);
-            rigidBody.MoveRotation(rigidBody.rotation * deltaRotation);
+            rigidBody.MoveRotation(rigidBody.rotation * Quaternion.Euler(new Vector3(0, 500, 0) * Time.deltaTime));
         }
     }
 }
