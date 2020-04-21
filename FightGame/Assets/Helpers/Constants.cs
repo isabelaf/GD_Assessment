@@ -101,10 +101,4 @@
             return string.Format(healthBarName, characterName);
         }
     }
-
-    public enum CharacterAction : int
-    {
-        Dodge = 0,
-        Attack = 1
-    };
 }

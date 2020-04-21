@@ -8,3 +8,7 @@ The first one to run out of HP/stamina will die.
 <b>Controls:</b>
 Witch (left): W (dodge), A & S (attack)
 Warrior (right): ↑ (dodge), ← & ↓ (attack)
+
+<b>Attacks:</b>
+Magic: controls = A (witch) & ← (warrior), damage = 25, needed stamina = 20
+Shuriken: controls = S (witch) & ↓ (warrior), damage = 15, needed stamina = 5

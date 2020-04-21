@@ -1,7 +1,6 @@
 ﻿using Assets.Helpers;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets.Scripts
@@ -18,6 +17,8 @@ namespace Assets.Scripts
         private int[] scores;
 
         private int popup = 0;
+
+        PopupService popupService;
 
         void Start()
         {
@@ -36,6 +37,8 @@ namespace Assets.Scripts
                 popup = 1;
             else
                 EnableCharacters();
+
+            popupService = new PopupService();
         }
 
         void OnGUI()
@@ -43,24 +46,22 @@ namespace Assets.Scripts
             switch (popup)
             {
                 case 1:
-                    PopupService.ShowConfirmationPopup(
-                        1,
+                    popupService.ShowPopup(
+                        popup,
                         Resources.Load<TextAsset>(ResourceFiles.FightSceneInstructions).text,
                         new List<(string, System.Action)> { (PopupButtons.OK, StartGame) });
                     break;
                 case 2:
-                    PopupService.ShowConfirmationPopup(
-                        2,
+                    popupService.ShowPopup(
+                        popup,
                         FightSceneMessages.NextRoundMessage,
-                        new List<(string, System.Action)> { (PopupButtons.NextRound, NextRound) },
-                        true);
+                        new List<(string, System.Action)> { (PopupButtons.NextRound, NextRound) });
                         break;
                 case 3:
-                    PopupService.ShowConfirmationPopup(
-                        3, 
+                    popupService.ShowPopup(
+                        popup, 
                         FightSceneMessages.GameOverMessage(winner), 
-                        new List<(string, System.Action)> { (PopupButtons.NextLevel, NextLevel) },
-                        true);
+                        new List<(string, System.Action)> { (PopupButtons.NextLevel, NextLevel) });
                     break;
                 default:
                     break;
@@ -228,13 +229,13 @@ namespace Assets.Scripts
             PlayerPrefs.SetInt(PlayerPrefsKeys.FightSceneWitchScore, scores[0]);
             PlayerPrefs.SetInt(PlayerPrefsKeys.FightSceneWarriorScore, scores[1]);
 
-            SceneManager.LoadScene(Scenes.FightScene, LoadSceneMode.Single);
+            GameManager.LoadScene(Scenes.FightScene);
         }
 
         private void NextLevel()
         {
             PlayerPrefs.SetString(PlayerPrefsKeys.FightSceneWinner, winner);
-            SceneManager.LoadScene(Scenes.TreasureScene, LoadSceneMode.Single);
+            GameManager.LoadScene(Scenes.TreasureScene);
         }
 
         private void EnableCharacters()

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts
 {
@@ -15,6 +14,8 @@ namespace Assets.Scripts
 
         private int popup;
 
+        PopupService popupService;
+
         void Start()
         {
             Physics.gravity = new Vector3(0f, -25f, 0f);
@@ -22,6 +23,8 @@ namespace Assets.Scripts
             InitCharacters();
 
             popup = 1;
+
+            popupService = new PopupService();
         }
 
         void OnGUI()
@@ -29,21 +32,20 @@ namespace Assets.Scripts
             switch (popup)
             {
                 case 1:
-                    PopupService.ShowConfirmationPopup(
-                        1,
+                    popupService.ShowPopup(
+                        popup,
                         Resources.Load<TextAsset>(ResourceFiles.TreasureSceneInstructions).text,
                         new List<(string, System.Action)>{ (PopupButtons.OK, StartGame) });
                     break;
                 case 2:
-                    PopupService.ShowConfirmationPopup(
-                        2,
+                    popupService.ShowPopup(
+                        popup,
                         $"{(isWin.Value ? TreasureSceneMessages.WinMessage : TreasureSceneMessages.LoseMessage)}\n{TreasureSceneMessages.GameOverMessage}",
                         new List<(string, System.Action)>
                         { 
                             (PopupButtons.Exit, () => { Application.Quit(0); }),
-                            (PopupButtons.PlayAgain, () => { SceneManager.LoadScene(Scenes.FightScene, LoadSceneMode.Single); })
-                        },
-                        true);
+                            (PopupButtons.PlayAgain, () => { GameManager.LoadScene(Scenes.FightScene); })
+                        });
                     break;
                 default:
                     break;
